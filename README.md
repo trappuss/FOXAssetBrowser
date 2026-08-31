@@ -19,6 +19,29 @@ predecessor: a headless bulk ripper driving FoxBrowser's decoders. **FOX Asset
 Browser replaces it and shares no code with it.** Every format reader here is a
 native C++ port, so it needs nothing installed but the game.
 
+![A Survivor posed on a real animation clip](docs/preview-animation.png)
+
+*A Survive player character composed from five slotted parts — head equipment,
+torso, chest rig, arms, legs — on one 449-bone skeleton, posed at frames 12, 45
+and 78 of a clip out of the game's own `.mtar`.*
+
+---
+
+## Preview
+
+| | |
+|---|---|
+| **Customize** — build a character from its slots, or a weapon from its parts. Every game's own catalogue drives the rows. | **Models** — FMDL with the material inspector: technique, shader parameters, and every texture by role. |
+| ![Customize](docs/preview-builder.png) | ![Models](docs/preview-models.png) |
+| **Textures** — the mip table shows which levels are present and which are streamed away, with the models that use this texture and the slot each binds it to. | **Files** — the whole index, searchable, with fox2 and other structured formats decoded in place. |
+| ![Textures](docs/preview-textures.png) | ![Files](docs/preview-files.png) |
+| **Bulk Extract** — filter by path, extension or resolved-only, with container contents included and an FPK opened once for all its matches. | |
+| ![Bulk Extract](docs/preview-bulk.png) | |
+
+<sub>These are real runs against a small reference asset tree rather than a
+full install, which is why the status bar reads 1,380 files. On a game folder
+it reads several hundred thousand.</sub>
+
 ---
 
 ## 📖 The Fox Engine Asset Handbook
