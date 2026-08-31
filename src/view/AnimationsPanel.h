@@ -181,6 +181,10 @@ private:
     QSet<int> m_scopeArchives;
     int m_scopeClips = 0;
     int m_scopeCeiling = 0;
+    // The binding's own account of why it found nothing, carried through so
+    // the empty page can print it instead of a sentence written in advance
+    // that assumes which of the causes it was.
+    QString m_scopeWhy;
     bool m_scopeResolved = false;
     // Shown IN PLACE OF the tree when a scope leaves nothing: the sentence
     // needs to wrap, and a tree row in a docked column cannot.

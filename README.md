@@ -19,11 +19,14 @@ predecessor: a headless bulk ripper driving FoxBrowser's decoders. **FOX Asset
 Browser replaces it and shares no code with it.** Every format reader here is a
 native C++ port, so it needs nothing installed but the game.
 
-![A Survivor posed on a real animation clip](docs/preview-animation.png)
+![The Customize tab: a Survive player built from six parts and posed on a clip](docs/preview-builder.png)
 
-*A Survive player character composed from five slotted parts — head equipment,
-torso, chest rig, arms, legs — on one 449-bone skeleton, posed at frames 12, 45
-and 78 of a clip out of the game's own `.mtar`.*
+*The Customize tab on a full install. A Survive player assembled from six
+parts — **five of them brought in by the variation tables** — with the face,
+eyes, skin, wrinkles, eyebrows, hair colour and tattoo the game's own catalogue
+offers, a camouflage variation and a two-channel gear colour, posed at frame 31
+of a clip out of the archives. 754 bones, 23,701 triangles, 26 materials, and
+every one of them inspectable on the right.*
 
 ---
 
@@ -31,16 +34,16 @@ and 78 of a clip out of the game's own `.mtar`.*
 
 | | |
 |---|---|
-| **Customize** — build a character from its slots, or a weapon from its parts. Every game's own catalogue drives the rows. | **Models** — FMDL with the material inspector: technique, shader parameters, and every texture by role. |
-| ![Customize](docs/preview-builder.png) | ![Models](docs/preview-models.png) |
-| **Textures** — the mip table shows which levels are present and which are streamed away, with the models that use this texture and the slot each binds it to. | **Files** — the whole index, searchable, with fox2 and other structured formats decoded in place. |
-| ![Textures](docs/preview-textures.png) | ![Files](docs/preview-files.png) |
-| **Bulk Extract** — filter by path, extension or resolved-only, with container contents included and an FPK opened once for all its matches. | |
-| ![Bulk Extract](docs/preview-bulk.png) | |
+| **Models** — filter by tag (`#survive #weapon`), hover any row for a preview that says where the file lives, and open the animation panel: **24,353 clips** across every archive, grouped by the asset they belong to. | **Textures** — 196,836 of them, as a grid or a list. Alpha is shown against a checkerboard, each channel is one click away, and the mip table says which levels are present and which stream in from where. |
+| ![Models](docs/preview-models.png) | ![Textures](docs/preview-textures.png) |
+| **Files** — the whole index as a tree, with a preview and a pixel readout for anything that decodes, and the export set on every row. The panel names the archive a file came out of and whether it was found inside a container. | **Bulk Extract** — filter by path, extension, tag or resolved-only; **739,619 files** match here with container contents included. Fifteen workers, and an FPK is opened once for all of its matches. |
+| ![Files](docs/preview-files.png) | ![Bulk Extract](docs/preview-bulk.png) |
 
-<sub>These are real runs against a small reference asset tree rather than a
-full install, which is why the status bar reads 1,380 files. On a game folder
-it reads several hundred thousand.</sub>
+<sub>Real screenshots, on a real install: 32 archives, 1,111,128 files,
+1,035,755 of them resolved to names through the community dictionaries. The
+texture selected in the Textures shot is one of the ones that is **not** — a
+bare hash — and the tool still knows the four models that bind it, and the slot
+each binds it to.</sub>
 
 ---
 

@@ -20,8 +20,11 @@ and because a handbook that never admits a mistake cannot be trusted about the
 things it got right.
 
 Counts come from full passes over three installs: **576,760** files in TPP,
-**331,470** in Survive, **55,534** in GZ — plus **1,111,128** container
-children that a top-level walk never sees.
+**331,470** in Survive and **55,534** in GZ. With every FPK, FPKD and PFTXS
+container opened as well, one machine's four-game install indexes **1,111,128
+files**, **1,035,755** of them resolved to real names — and the model, script
+and animation population is almost all in that container layer, invisible to a
+top-level walk.
 
 This handbook is compiled from two projects that share no code:
 [foxanimrip](https://github.com/trappuss/FOXanimrip), a headless bulk ripper,

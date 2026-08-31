@@ -162,10 +162,11 @@ A **QarEntry** replaces a file the game keeps as its own archive entry. An
 **FpkEntry** replaces one it keeps *inside* an `.fpk`, and the installer has to
 re-pack it into that container.
 
-This matters far more than it looks: the deep scan counts **1,111,128**
-container children on a full install. Writing a container-resident asset as a
-QarEntry produces a mod that installs perfectly and changes nothing, with
-nothing saying why — the worst outcome available.
+This matters far more than it looks. The container layer is where the
+interesting files are: a top-level walk of TPP reports **305,065** entries as
+container-internal and sees none of its 19,138 models. Writing a
+container-resident asset as a QarEntry produces a mod that installs perfectly
+and changes nothing, with nothing saying why — the worst outcome available.
 
 A flat mod folder of asset paths cannot express the second kind. The honest
 thing is to **refuse and name the files**, and say that writing an `.fpk` is

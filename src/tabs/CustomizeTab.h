@@ -390,6 +390,25 @@ private:
         // bone it hangs from actually is. Negative = not measurable (the host
         // itself, or a part with no comparable bone anywhere in the scene).
         float residual = -1.0f;
+
+        // ── THE SAME QUESTION, ASKED OF THE GEOMETRY ────────────────────
+        // `residual` above compares BONE positions, and that is the whole of
+        // what it can see. A part whose root bone lands perfectly while its
+        // vertices sit half a metre away scores 0.0000 on it — which is
+        // exactly what a wardrobe sweep reported for a scene with two
+        // accessories visibly off the head.
+        //
+        // So this measures the MESH. `meshOffset` is how far the part's
+        // skinned centroid ended up from the bone it hangs on; `bindOffset`
+        // is how far the author put it from that same bone in the part's own
+        // file. A seated part reproduces what the author drew, so the two
+        // agree, and `meshResidual` — the distance between the two offset
+        // VECTORS — is the number that goes to zero when the part is where it
+        // belongs. Comparing lengths alone would call a hat rotated to the
+        // back of the head correctly placed.
+        QVector3D meshOffset, bindOffset;
+        float meshResidual = -1.0f;
+        int meshVerts = 0;          // 0 = no skinned geometry to measure
     };
     void fillLastAlign(const QVector<int>& drivenOf,
                        const QVector<bool>& borrowedOf,

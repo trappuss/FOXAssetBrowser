@@ -1917,7 +1917,8 @@ QString CustomizeTab::restAlignSweepReport(const QString& tsvPath)
         return QStringLiteral("cannot write %1").arg(tsvPath);
     QTextStream out(&f);
     out << "slot\titem\tbones\trootBone\tdriven\tregime\texit\tanchorPart\t"
-           "anchorBone\tdx\tdy\tdz\tresidual\tverdict\n";
+           "anchorBone\tdx\tdy\tdz\tresidual\tmeshResidual\tmeshVerts\t"
+           "bindOffset\tmeshOffset\tverdict\n";
 
     const float frame = m_frame;
     int tested = 0, floating = 0, unmeasured = 0;
@@ -1954,10 +1955,32 @@ QString CustomizeTab::restAlignSweepReport(const QString& tsvPath)
             // only happens for a torso in a scene with no base.
             if (a.regime == 'H')        { verdict = QStringLiteral("host — nothing larger to measure against"); ++unmeasured; }
             else if (a.residual < 0.0f) { verdict = QStringLiteral("NOT MEASURABLE — no part in the scene carries its root bone"); ++unmeasured; }
-            else if (a.residual > 0.02f){ verdict = QStringLiteral("FLOATING"); ++floating;
-                                          worst << QStringLiteral("%1 %2 %3 m")
+            else if (a.residual > 0.02f){ verdict = QStringLiteral("FLOATING (bone)"); ++floating;
+                                          worst << QStringLiteral("%1 %2 bone %3 m  (mesh %4 m)")
                                                        .arg(slot, a.stem)
-                                                       .arg(double(a.residual), 0, 'f', 4); }
+                                                       .arg(double(a.residual), 0, 'f', 4)
+                                                       .arg(double(a.meshResidual), 0, 'f', 4); }
+            // NO MESH VERDICT — and that is a deliberate omission, recorded
+            // here so it is not "fixed" by someone adding one.
+            //
+            // meshResidual is reported as a COLUMN below, because the number
+            // is worth having, but it must not decide pass or fail as it
+            // stands: it compares the skinned centroid's offset from the
+            // anchor bone against the offset the author drew, and for any
+            // part the clip actually DEFORMS those two legitimately differ.
+            // Thresholded at 2 cm it called 116 of 145 items displaced,
+            // including every leg garment at 5-9 cm, which is a walk cycle
+            // bending a knee and nothing else. Replacing a metric that is
+            // blind to this fault with one that cries wolf about every limb
+            // is not an improvement.
+            //
+            // The valid form of this test is at BIND, where nothing deforms —
+            // and at bind a rigid translate moves bone and mesh together, so
+            // it collapses back into the bone test above. Which means the
+            // fault the screenshots show is NOT in the number: it is that the
+            // bind-pose render goes through applyAttachTransforms' group
+            // transform while the posed path folds translate(d) into the
+            // palette, and nothing has ever measured the first one.
             else                          verdict = QStringLiteral("seated");
             out << slot << '\t' << a.stem << '\t' << a.bones << '\t'
                 << a.rootBone << '\t' << a.driven << '\t'
@@ -1968,7 +1991,14 @@ QString CustomizeTab::restAlignSweepReport(const QString& tsvPath)
                 << QString::number(double(a.d.z()), 'f', 4) << '\t'
                 << (a.residual < 0.0f ? QString()
                                       : QString::number(double(a.residual), 'f', 4))
-                << '\t' << verdict << '\n';
+                << '\t'
+                << (a.meshResidual < 0.0f
+                        ? QString()
+                        : QString::number(double(a.meshResidual), 'f', 4))
+                << '\t' << a.meshVerts << '\t'
+                << QString::number(double(a.bindOffset.length()), 'f', 4) << '\t'
+                << QString::number(double(a.meshOffset.length()), 'f', 4) << '\t'
+                << verdict << '\n';
         }
         // Put the row back to "none" so the next slot is measured on its own
         // rather than on a character wearing everything tried before it.

@@ -3386,6 +3386,63 @@ void CustomizeTab::fillLastAlign(
                 animmath::Vec3(tb.worldPos[0], tb.worldPos[1], tb.worldPos[2]),
                 unfolded[tgtPart][tgtBone]);
             out.residual = (landed - target).length();
+
+            // ── AND THE SAME QUESTION ASKED OF THE GEOMETRY ─────────────
+            // Skin the vertices the way the renderer does — palette index per
+            // vertex, four weights — and take the centroid. Doing it through
+            // the real palette matters: following the root bone instead is
+            // what the metric above already does, and it is why it cannot see
+            // this class of fault.
+            animmath::Vec3 sumPosed(0, 0, 0), sumBind(0, 0, 0);
+            int nv = 0;
+            for (const fox::FmdlMesh& m : p.model.meshes()) {
+                const int verts = int(m.positions.size() / 3);
+                if (verts <= 0 || m.boneIndices.size() < size_t(verts) * 4)
+                    continue;
+                for (int v = 0; v < verts; ++v) {
+                    const animmath::Vec3 bindPos(m.positions[v * 3 + 0],
+                                                 m.positions[v * 3 + 1],
+                                                 m.positions[v * 3 + 2]);
+                    animmath::Vec3 acc(0, 0, 0);
+                    float wsum = 0.0f;
+                    for (int k = 0; k < 4; ++k) {
+                        const float w = m.boneWeights.value(v * 4 + k, 0.0f);
+                        if (w <= 0.0f) continue;
+                        const int pi2 = m.boneIndices.value(v * 4 + k, 0);
+                        const int b = m.palette.value(pi2, 0);
+                        if (b < 0 || b >= poses[pi].size()) continue;
+                        const animmath::Vec3 t =
+                            animmath::transform(bindPos, poses[pi][b]);
+                        acc.x += t.x * w; acc.y += t.y * w; acc.z += t.z * w;
+                        wsum += w;
+                    }
+                    // An unweighted vertex rides the part's root, which is
+                    // what the renderer falls back to as well.
+                    if (wsum <= 0.0f)
+                        acc = animmath::transform(bindPos, poses[pi][root]);
+                    sumPosed.x += acc.x; sumPosed.y += acc.y; sumPosed.z += acc.z;
+                    sumBind.x += bindPos.x; sumBind.y += bindPos.y;
+                    sumBind.z += bindPos.z;
+                    ++nv;
+                }
+            }
+            if (nv > 0) {
+                out.meshVerts = nv;
+                const animmath::Vec3 cPosed(sumPosed.x / nv, sumPosed.y / nv,
+                                            sumPosed.z / nv);
+                const animmath::Vec3 cBind(sumBind.x / nv, sumBind.y / nv,
+                                           sumBind.z / nv);
+                // Where the author put the geometry relative to the bone it
+                // hangs on, in the part's OWN file …
+                out.bindOffset = QVector3D(cBind.x - mineRoot.x,
+                                           cBind.y - mineRoot.y,
+                                           cBind.z - mineRoot.z);
+                // … and where it actually ended up relative to that bone.
+                out.meshOffset = QVector3D(cPosed.x - target.x,
+                                           cPosed.y - target.y,
+                                           cPosed.z - target.z);
+                out.meshResidual = (out.meshOffset - out.bindOffset).length();
+            }
         }
     }
 }

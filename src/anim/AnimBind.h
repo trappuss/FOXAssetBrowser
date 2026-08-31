@@ -33,6 +33,15 @@ struct Binding {
     bool haveRig = false;
     QSet<int> archives;    // ArchiveIndex fileIdx of the archives that bind
     int clips = 0;         // clips inside those archives
+    // WHY, when `clips` is zero. An empty panel that says only "0 clip(s)" is
+    // the same picture whether the file could not be found, could not be
+    // parsed, has nothing a clip could drive, or simply had no archive score
+    // high enough — and those are four different problems with four different
+    // fixes. Every early return below sets this, and the threshold case
+    // records the best score it actually saw, so the number can be compared
+    // against the threshold instead of guessed at.
+    QString why;
+    float bestScore = 0.0f;   // the highest score any archive reached
     bool valid() const { return !modelPath.isEmpty(); }
 };
 

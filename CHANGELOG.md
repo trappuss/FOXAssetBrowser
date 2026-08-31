@@ -14,8 +14,11 @@ path that can put files back.
   scheme. Ported byte-for-byte from GzsTool.
 - **The deep scan** — `.fpk`, `.fpkd` and `.pftxs` containers opened once,
   their children indexed with real stored paths, and the listing cached against
-  every archive's size and mtime. 1,111,128 container children on a full TPP
-  install that a top-level walk never sees.
+  every archive's size and mtime. A full multi-game install indexes
+  **1,111,128 files** with containers included, and the model, script and
+  animation population is almost entirely inside them — a top-level walk of
+  TPP reports 305,065 entries as container-internal and sees none of its
+  19,138 models.
 - **Name resolution** — PathFileNameCode hashing against the community
   dictionaries, with the 13-bit extension-code table and the GZ legacy scheme.
   The implementation is verified against the hashes shipped inside PFTXS packs

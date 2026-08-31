@@ -122,9 +122,14 @@ TPP extension histogram, top level only:
 | 3131 | fsm | 239 |
 | 8074 | gani | 1 |
 
-19,138 models and 1,236 animation sets in TPP appear **absent** from that list.
-They are all one level down. A deep scan that opens each container once and
-records its child listing finds **1,111,128** children on a full install.
+19,138 models and 1,236 animation sets in TPP appear **absent** from that
+list. They are all one level down: **305,065** top-level entries report
+extension code 0 because they are container-internal.
+
+A deep scan that opens each container once and records its child listing turns
+that into a browsable index. On a full multi-game install — TPP, Ground Zeroes,
+MGO and Survive, 32 archives — the result is **1,111,128 files indexed**,
+1,035,755 of them resolved to names.
 
 Two things make the deep pass tractable: FPK entries carry real **path
 strings**, so container contents need no dictionary at all; and the listing

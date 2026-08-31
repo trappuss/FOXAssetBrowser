@@ -421,6 +421,18 @@ ModelsTab::ModelsTab(QWidget* parent) : QWidget(parent)
     // argument §6 makes for the Export menu.
     connect(m_display->optionsMenu(), &QMenu::aboutToShow, this,
             [this] { rebuildDisplayOptions(); });
+    // THE MODE ITSELF, which nothing was listening to. The button stored the
+    // choice, wrote it to settings and emitted modeChanged — and this tab
+    // connected only the OPTIONS menu, so picking List, Outliner or Grid
+    // updated the tick and changed nothing on screen. The Textures tab has
+    // always connected this; the Models tab never did, so its display button
+    // was inert from the day it was added and only --viewmode (which calls
+    // applyDisplayMode directly) could switch the view.
+    connect(m_display, &fox::DisplayModeButton::modeChanged, this,
+            [this](const QString& id) {
+                applyDisplayMode(id);
+                if (id == fox::displaymode::grid()) renderVisibleThumbnails();
+            });
     rebuildDisplayOptions();
 
     connect(m_outliner, &fox::ModelOutliner::modelActivated, this,
@@ -2939,13 +2951,20 @@ bool ModelsTab::setDisplayModeForShot(const QString& id)
     if (want != fox::displaymode::list() && want != fox::displaymode::outliner()
         && want != fox::displaymode::grid())
         return false;
+    // setMode ALONE. It emits modeChanged, and the connection in the
+    // constructor is what applies it — which is exactly the path a user takes
+    // when they pick a mode from the button's menu.
+    //
+    // This used to call applyDisplayMode() itself as well, and that is why the
+    // flag passed for months while the button did nothing: the harness was
+    // driving the view directly and never touching the signal the UI depends
+    // on. A test that takes a different route to the same place cannot see a
+    // broken route.
     m_display->setMode(want);
-    applyDisplayMode(want);
     // The harness has no event loop between here and the grab, and both the
     // tree and the grid lay out lazily. Pump it so what is photographed is
     // what the mode actually produces.
     for (int i = 0; i < 4; ++i) QCoreApplication::processEvents();
-    if (want == fox::displaymode::grid()) renderVisibleThumbnails();
     return true;
 }
 

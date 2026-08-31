@@ -493,6 +493,7 @@ bool AnimationsPanel::setScopeModel(const QString& modelNeedle)
     m_scopeClips = b.clips;
     m_scopeCeiling = b.ceiling;
     m_scopeLabel = b.label;
+    m_scopeWhy = b.why;
     m_scopeResolved = true;
     m_syncing = true;
     const int at = m_scope->findData(QStringLiteral("other"));
@@ -520,6 +521,7 @@ void AnimationsPanel::resolveScope()
         m_scopeClips = m_totalClips;
         m_scopeCeiling = 0;
         m_scopeLabel.clear();
+        m_scopeWhy.clear();
         m_scopeResolved = true;
         return;
     }
@@ -532,6 +534,7 @@ void AnimationsPanel::resolveScope()
     m_scopeClips = b.clips;
     m_scopeCeiling = b.ceiling;
     m_scopeLabel = b.label;
+    m_scopeWhy = b.why;
     m_scopeResolved = true;
 }
 
@@ -691,6 +694,20 @@ void AnimationsPanel::applyFilter()
                 "switch to \"All animations\" to browse everything.")
                       .arg(m_scopeLabel.isEmpty() ? QStringLiteral("This model")
                                                   : m_scopeLabel);
+        else if (m_scopeArchives.isEmpty() && !m_scopeWhy.isEmpty())
+            // NOTHING BOUND, and the binding knows which of the several
+            // reasons it was. The sentence below is written for the case where
+            // archives WERE found and reads as nonsense at zero ("0 of the
+            // install's motion archives can pose this, and these are the
+            // archives with tracks for them"), which is how an empty panel
+            // ended up explaining nothing.
+            why = QStringLiteral(
+                "No motion archive in this install binds to %1.\n\n%2\n\n"
+                "Switch this to \"All animations\" to browse everything "
+                "regardless of the rig.")
+                      .arg(m_scopeLabel.isEmpty() ? QStringLiteral("this model")
+                                                  : m_scopeLabel)
+                      .arg(m_scopeWhy);
         else
             why = QStringLiteral(
                 "%1 of the install's motion archives can pose %2: its rig "

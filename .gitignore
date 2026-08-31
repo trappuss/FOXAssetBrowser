@@ -54,6 +54,14 @@ dict/qar_dictionary.txt
 # ── publish settings (may hold a repo name you did not mean to share) ────
 .publish.cfg
 
+# ── screenshots ──────────────────────────────────────────────────────────
+# docs/ IS published — it holds the README's preview images. Two exceptions:
+# the superseded set kept beside them, and the double-extension a drag-and-drop
+# rename leaves behind, which would publish a second copy of an image under a
+# name nothing links to.
+docs/.old/
+*.png.png
+
 # ── editor / OS ──────────────────────────────────────────────────────────
 .vs/
 .vscode/
