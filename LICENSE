@@ -1,0 +1,48 @@
+MIT License
+
+Copyright (c) 2026 trappuss
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+THIRD-PARTY NOTICES
+
+This project contains C++ ports of, and vendored code from, other projects.
+Each is the work of its author and is credited here and in the wiki.
+
+  CityHash (Google) — MIT. Vendored verbatim in src/fox/FoxCity.* for
+  bit-exact hashing.
+
+  GzsTool (Atvaark) — the QAR/SQAR, FPK/FPKD and PFTXS readers in src/fox/
+  are direct ports of its format handling and ciphers.
+
+  FtexTool (Atvaark) — the FTEX/FTEXS reader is a port of its layout
+  handling; the writer is that reader's inverse.
+
+  SnakeBite (topher-au and contributors) — the .mgsv metadata schema
+  implemented in src/util/ModPackage.* is read from its source.
+
+No game assets are included. Metal Gear Solid, Ground Zeroes, The Phantom
+Pain, Metal Gear Online, Metal Gear Survive and Fox Engine are trademarks of
+Konami; this project is not affiliated with Konami.
+
+The hash dictionaries distributed alongside releases are community data,
+principally from mgsv-lookup-strings (kapuragu) and the FoxBrowser
+dictionaries, and remain the work of their contributors.

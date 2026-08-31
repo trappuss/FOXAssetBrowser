@@ -1,0 +1,3 @@
+// Explorer/desktop icon for the .exe file itself (the runtime window icon is
+// the Qt resource :/app_256.png — both are needed, neither substitutes).
+IDI_ICON1 ICON "app.ico"

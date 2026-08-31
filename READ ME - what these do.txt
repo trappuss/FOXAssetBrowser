@@ -1,0 +1,117 @@
+FOXAssetBrowser -- the run-it-yourself scripts
+=============================================
+
+Double-click any of these. Nothing to type, nothing to set. Every one of them
+writes its output into  _deliveries\  and tells you at the end what it wrote.
+
+They all find the build automatically: build\release\ first, then dist\.
+
+
+THE ONE TO RUN FIRST
+--------------------
+
+Diagnose - Accessory Positions.bat
+    Equips EVERY item of every slot on both Survivors, one at a time, poses
+    each on a real clip, and measures how far it lands from the bone it hangs
+    on. Under 0.02 m is seated; a fifth of a metre or more is the "flying
+    accessory" fault with a number on it.
+
+    Seconds per gender. Send back the two .tsv files. Anything marked FLOATING
+    is a real fault, and the row already says which bone, which regime and how
+    far -- which is normally enough to fix it without another round trip.
+
+    IT HAS TO BE POSED. At bind pose every item in the game is in the right
+    place. That is exactly why "it's fine in T-pose" was the reported symptom
+    for eight batches, and it is why this loads a clip before measuring.
+
+Diagnose - One Item.bat
+    The full per-part table for ONE item instead of one line each for ninety --
+    every part in the scene, its regime, its anchor, its correction and its
+    residual, plus the same table on every rebuild during assembly so a value
+    that changes as parts load is visible as it happens.
+
+    Defaults to hat15. For anything else, drop its name on the file or run
+    it as:   "Diagnose - One Item.bat" hat21
+
+
+THE MEASUREMENTS THE PROJECT OWES ITSELF
+----------------------------------------
+
+Measure - Weapon Camo Census.bat        (QUEUE 2)
+    Two runs. The first lists every row the Camo / Variation combo would build
+    for every weapon in the install. The second -- the decisive one -- names the
+    actual textures the camo tables substitute. If those names come back as
+    cm_camo4_cNN swatches, the camo rows really are redundant with gear colour
+    and they get deleted. If they are per-weapon textures, hiding them would
+    lose art nothing else can reach, and they stay.
+
+Measure - Animation Binding.bat         (QUEUE 3)
+    Scores every motion archive against the Walker Gear and prints a histogram.
+    Two clusters with a gap = a threshold exists and can be read off the chart.
+    One smear = there is no threshold, the filter stays as it is, and that is a
+    real answer rather than a failure. Minutes.
+
+Measure - Startup Timings.bat           (QUEUE 4, items 3 4 6)
+    A cold launch and a warm one, with the three lines that decide three
+    different pieces of work: which term dominates the animation catalogue,
+    what the 11.4 seconds of archive phase on EVERY launch is actually spent
+    on, and what the deep scan now costs. About four minutes.
+    Only data\cache\*.bin is cleared. Your settings are in a different folder
+    and are never touched.
+
+Measure - Deep Scan Acceptance.bat      (QUEUE 4, item 1)
+    The one test the parallel deep scan owes: build the index with one worker,
+    hash it; build it with eight, hash it again. Identical hashes and a lower
+    time means that batch was correct. Different hashes means the merge is out
+    of chunk order and nothing else about it matters. Two cold indexes -- about
+    six minutes.
+
+Measure - Texture Users.bat             (QUEUE 4, item 6)
+    The startup phase nobody has ever seen finish. It used to be abandoned
+    mid-sweep every time, so its real cost is simply unknown and its cache file
+    was never written. This runs it to completion, times it, and checks that
+    one worker and eight produce a byte-identical file.
+
+Measure - Lighting Rigs.bat             (QUEUE 4, item 5)
+    The oldest unmeasured thing in the project. The four per-game lighting rigs
+    are authored guesses and the flag that would check them has never been run.
+    Ten minutes, and it replaces four guesses with four measurements.
+
+
+MAKING AND SHIPPING A MOD
+-------------------------
+
+Package - Mod Folder.bat
+    Turns the mod folder into one .zip you can send to anyone -- the Assets\
+    tree exactly as the folder holds it, plus a manifest listing every asset's
+    size, MD5, Fox Engine hash, and whether the GAME keeps its own copy of that
+    asset inside an .fpk container.
+
+    Export > Package mod folder... does the same thing from the menu. This
+    script exists for the part the menu cannot do: the ZIP is written by this
+    tool's own code, so the script unpacks it again with Windows' own reader
+    and checks every file that comes back against the MD5 that was recorded
+    when it went in. Last line OK means the package is good.
+
+    It then offers to write a real SnakeBite .mgsv as well, which needs a mod
+    name and your name because a mod manager lists it under both. That format
+    is now fully settled -- the version field that stopped it last time was
+    found, and the file this writes is byte-identical to what SnakeBite's own
+    serialiser produces.
+
+    ONE THING IT WILL REFUSE. If the mod folder holds a replacement for a file
+    the game keeps INSIDE an .fpk container, the .mgsv is refused and those
+    files are named. A SnakeBite mod has to re-pack such a file into that
+    .fpk, this tool cannot write one yet, and a package that listed them as
+    ordinary entries would install perfectly and change nothing -- which is
+    the worst outcome available. Use mod_package.zip for those.
+
+    Nothing in this touches a .dat, .qar or .fpk. A mod folder is a mount:
+    deleting the files is the uninstall.
+
+
+WHAT TO SEND BACK
+-----------------
+
+Whatever landed in _deliveries\ . The .tsv files are the answers; the .log
+beside each one is the whole session in case a number needs explaining.

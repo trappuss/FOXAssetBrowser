@@ -1,0 +1,22 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
+  "name": "foxassetbrowser",
+  "version": "0.1.0",
+  "description": "Native C++/Qt6 asset browser and bulk extractor for Fox Engine games — reads QAR/FPK/PFTXS/FTEX archives directly.",
+  "dependencies": [
+    {
+      "name": "qtbase",
+      "default-features": false,
+      "features": [
+        "widgets",
+        "opengl",
+        "gui",
+        "png",
+        "jpeg"
+      ]
+    },
+    "qtsvg",
+    "zlib"
+  ],
+  "builtin-baseline": "ea1a7396b05637a53bf23c078647ecc0edee4b80"
+}

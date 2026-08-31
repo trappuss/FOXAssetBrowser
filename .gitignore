@@ -1,0 +1,64 @@
+# ── build output ──────────────────────────────────────────────────────────
+build/
+build-rel/
+out/
+dist/
+*.obj
+*.exe
+*.pdb
+*.ilk
+build_log.txt
+build_errors.txt
+
+# vcpkg
+vcpkg/
+vcpkg_installed/
+
+# ── the portable data folder: caches, settings and logs live beside the exe
+data/
+
+# ── working folders (see _archive/ — nothing here is published) ───────────
+_archive/
+_deliveries/
+_incoming/
+_probe/
+_Backups/
+.Backups/
+_to_delete/
+_skills/
+.Resources/
+
+# batch snapshots and release zips
+foxab-*.zip
+FOXAssetBrowser_portable.zip
+*.7z
+
+# ── session documents: the working history, not the product ──────────────
+MORNING_REPORT.md
+NEW_SESSION_PROMPT.md
+FABLE_PROMPT.md
+MGO_FACTS.md
+CUSTOMIZE_AUDIT.md
+FOLDER_MAP.md
+_SESSION_AUDIT.md
+_*_report.md
+_*_verify.md
+_*.png
+*.skill
+
+# ── the big dictionary ships as a release asset, not in the repo ─────────
+# 29 MB of third-party community data. Everything else in dict/ is small
+# enough to carry, and the release attaches dict.zip with the lot.
+dict/qar_dictionary.txt
+
+# ── publish settings (may hold a repo name you did not mean to share) ────
+.publish.cfg
+
+# ── editor / OS ──────────────────────────────────────────────────────────
+.vs/
+.vscode/
+.idea/
+*.user
+Thumbs.db
+desktop.ini
+.DS_Store
