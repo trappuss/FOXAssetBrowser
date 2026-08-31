@@ -704,6 +704,14 @@ void ArchiveIndex::rebuild(const QStringList& gameDirs, const QString& dictDir,
                     f.entryIdx = ei;
                     f.path = QLatin1Char('/') + rel;
                     f.named = true;
+                    // COUNTED, like every other mount. This branch set the
+                    // flag and skipped the tally that the Sqar and Gzs
+                    // branches below both keep, so a loose-only install
+                    // reported "0 named" in the status bar while showing
+                    // hundreds of resolved paths on screen — a contradiction
+                    // in one line, and the reason a screenshot of it looked
+                    // like a broken index.
+                    ++result->namedCount;
                     f.size = ei < arch.looseSizes.size() ? arch.looseSizes[ei]
                                                          : 0;
                     f.hash = hashFileNameWithExtension(f.path);
